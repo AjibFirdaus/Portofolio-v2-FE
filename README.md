@@ -2,6 +2,8 @@
 
 Portofolio-v2 adalah situs web portofolio yang dibangun menggunakan React Vite untuk frontend dan Node.js Express untuk backend. Proyek ini menampilkan kemampuan Anda sebagai web programmer dengan berbagai fitur interaktif.
 
+## [klik saya untuk membuka portofolio](https://ajibfirdaus.my.id)
+
 ## Fitur
 
 1. **Autentikasi Pengguna**
@@ -13,12 +15,12 @@ Portofolio-v2 adalah situs web portofolio yang dibangun menggunakan React Vite u
    - Unggah gambar untuk setiap proyek.
 
 3. **Animasi dan Desain**
-   - Animasi interaktif menggunakan GSAP.
-   - Desain komponen dengan teks berwarna emas tanpa latar belakang.
+   - Animasi interaktif menggunakan DaisyUI.
+   - Desain komponen dengan teks berwarna putih tanpa latar belakang.
 
 4. **Keamanan**
    - Perlindungan terhadap serangan path traversal.
-   - Validasi input yang ketat.
+   - Validasi input yang ketat. (belum di test)
 
 ## Dokumentasi
 
