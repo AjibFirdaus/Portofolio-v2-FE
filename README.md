@@ -1,42 +1,64 @@
 # Portofolio-v2
 
-## Overview
-Portofolio-v2 is a modern web application designed to showcase personal and professional achievements. This project leverages cutting-edge web technologies to provide a seamless and interactive user experience. Users can update their information, including images, personal data, phone numbers, and more.
+Portofolio-v2 adalah situs web portofolio yang dibangun menggunakan React Vite untuk frontend dan Node.js Express untuk backend. Proyek ini menampilkan kemampuan Anda sebagai web programmer dengan berbagai fitur interaktif.
 
-## Frontend
+## Fitur
 
-### Framework
-- **React Vite**: A fast, opinionated build tool that leverages ES modules, providing a superior development experience and faster builds.
+1. **Autentikasi Pengguna**
+   - Registrasi dan Login dengan enkripsi password menggunakan bcrypt.
+   - Otentikasi menggunakan JWT token.
 
-### Packages Used
-- **axios**: A promise-based HTTP client for making requests to the backend.
-- **daisyUI**: A plugin for Tailwind CSS that provides a set of customizable, accessible UI components.
-- **socket.io-client**: A client-side library that enables real-time, bidirectional, and event-based communication with the backend.
+2. **Sistem Pengelolaan Portofolio**
+   - Tambah, edit, dan hapus proyek portofolio.
+   - Unggah gambar untuk setiap proyek.
 
-## Backend
+3. **Animasi dan Desain**
+   - Animasi interaktif menggunakan GSAP.
+   - Desain komponen dengan teks berwarna emas tanpa latar belakang.
 
-### Framework
-- **Node.js Express**: A minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
+4. **Keamanan**
+   - Perlindungan terhadap serangan path traversal.
+   - Validasi input yang ketat.
 
-### Packages Used
-- **prisma**: An ORM (Object-Relational Mapping) tool used to interact with the MySQL database seamlessly.
-- **bcrypt**: A library to help hash passwords, ensuring secure storage of user credentials.
-- **crypto-js**: A library for encrypting data, used here to encrypt JSON Web Tokens (JWT).
-- **jsonwebtoken (JWT)**: A package to sign and verify JSON Web Tokens, used for managing user authentication and authorization.
-- **express-rate-limit**: Middleware to protect the application from brute-force attacks by limiting repeated requests to public APIs.
-- **helmet**: Middleware that helps secure Express applications by setting various HTTP headers.
-- **socket.io**: A library that enables real-time, bidirectional, and event-based communication between the frontend and backend.
+## Dokumentasi
 
-## Features
-- **User Authentication**: Secure login and registration system with encrypted password storage and JWT-based session management.
-- **Real-time Updates**: Real-time communication between the frontend and backend using Socket.io.
-- **Rate Limiting**: Protection against brute-force attacks with rate limiting.
-- **Secure Data Transfer**: Enhanced security for data transfer with Helmet.
-- **User Profile Management**: Allows users to update their personal information, including images, personal data, and phone numbers.
+![Login Page](./doc/login.png)
+*Gambar 1: Modal Login*
 
-## Installation and Setup
+![Home Section](./doc/home.png)
+*Gambar 2: Tampilan Home*
 
-### Prerequisites
-- Node.js (v20 or later)
-- MySQL
+![About Section](./doc/about.png)
+*Gambar 2: Tampilan About*
 
+![Projects Section](./doc/projects.png)
+*Gambar 2: Tampilan Projects*
+
+![Contact Section](./doc/contact.png)
+*Gambar 2: Tampilan Contact*
+
+![Messages Section](./doc/messages.png)
+*Gambar 2: Tampilan Messages*
+
+## Instalasi
+
+Ikuti langkah-langkah berikut untuk menginstal dan menjalankan proyek ini secara lokal:
+
+1. **Clone repositori**
+    ```bash
+    https://github.com/AjibFirdaus/Portofolio-v2-FE.git
+    cd frontend
+    ```
+
+2. **Instal dependensi untuk frontend**
+    ```bash
+    npm install
+    ```
+
+3. **Jalankan aplikasi frontend**
+    ```bash
+    npm run dev
+    ```
+
+4. **Akses aplikasi (Harus sudah running program backend nya)**
+    - Buka browser dan akses `http://localhost:5173` untuk melihat aplikasi.
