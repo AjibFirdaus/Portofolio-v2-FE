@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import React, { useState, useRef } from 'react';
 import useFetchData from '../hooks/fetchData';
 import useCheckLogin from '../hooks/fetchCheckLogin';
@@ -39,7 +40,6 @@ const About: React.FC = () => {
         return {
           ...editedData,
           photo: editedData.photo.split("base64,")[1]
-          // photo: null,
         };
       } else {
         return editedData;
@@ -49,7 +49,6 @@ const About: React.FC = () => {
     await updateData(finalEdited);
     if (!updateError) {
       setIsEditing(false);
-      window.location.reload(); // Refresh to show updated data
     }
   };
 
@@ -102,7 +101,7 @@ const About: React.FC = () => {
                 >
                   Choose New Photo
                 </button>
-                <button onClick={handleSave} className="btn btn-primary mr-2" disabled={updating}>
+                <button onClick={handleSave} className="btn btn-primary ml-2 mr-2" disabled={updating}>
                   {updating ? 'Saving...' : 'Save'}
                 </button>
                 <button onClick={handleCancel} className="btn btn-secondary">Cancel</button>
@@ -116,7 +115,7 @@ const About: React.FC = () => {
                   {data.description2}
                 </p>
                 {isLoggedIn && (
-                  <button onClick={handleEdit} className="bg-purple-600 text-white btn btn-primary mt-4">Edit This Section</button>
+                  <button onClick={handleEdit} className="bg-purple-600 text-white btn btn-primary mt-4">Edit Information</button>
                 )}
               </>
             )}

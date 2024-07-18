@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require("../helper/verifyToken");
+const { io } = require("../server");
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
@@ -17,6 +18,7 @@ router.put('/:page', verifyToken, async (req, res) => {
     });
 
     res.json({ message: 'Data updated successfully', data: updatedPage });
+    io.emit("updateData")
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });

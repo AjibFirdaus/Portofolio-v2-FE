@@ -18,3 +18,10 @@ model Pages {
   page  String @unique
   data  Json
 }
+
+model Messages {
+  id    String @id @default(uuid()) 
+  sender String
+  email  String
+  message String @db.LongText
+}

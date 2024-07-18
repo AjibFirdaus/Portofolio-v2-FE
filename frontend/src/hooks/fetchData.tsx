@@ -1,6 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import io from 'socket.io-client';
 import config from '../config/baseUrl';
+import { useToast } from '../components/toastContext';
 
 interface HomeData {
     name: string;
@@ -11,7 +14,7 @@ interface HomeData {
 }
 
 interface AboutData {
-    photo: string; // URL to the photo
+    photo: string;
     description: string;
     description2: string;
 }
@@ -21,7 +24,7 @@ interface ProjectData {
         title: string;
         description: string;
         link: string;
-        image: string; // URL to the image
+        image: string;
     }>;
 }
 
@@ -38,17 +41,25 @@ interface ContactData {
     };
 }
 
-type PageData = HomeData | AboutData | ProjectData | ContactData;
+interface MessagesData {
+    id: string,
+    sender: string,
+    email: string,
+    message: string,
+}
 
-type PageType = 'home' | 'about' | 'projects' | 'contact';
+type PageData = HomeData | AboutData | ProjectData | ContactData | MessagesData;
 
+type PageType = 'home' | 'about' | 'projects' | 'contact' | 'messages';
+
+const socket = io(config)
 
 const useFetchData = (page: PageType) => {
+    const { showToast } = useToast();
     const [data, setData] = useState<PageData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    // Helper function to detect MIME type from base64 string
     const getMimeType = (base64String: string): string => {
         const signatures: { [key: string]: string } = {
             '/9j/': 'image/jpeg',
@@ -61,46 +72,72 @@ const useFetchData = (page: PageType) => {
                 return signatures[signature];
             }
         }
-        return 'image/jpeg'; // default to JPEG if unknown
+        return 'image/jpeg';
     };
 
-    // Helper function to convert base64 to data URL
     const base64ToDataUrl = (base64String: string): string => {
         const mimeType = getMimeType(base64String);
         return `data:${mimeType};base64,${base64String}`;
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get<{ data: PageData }>(`${config}/api-select/${page}`);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get<{ data: PageData }>(`${config}/api-select/${page}`);
 
-                let processedData = response.data.data;
-                if ('photo' in processedData) {
-                    if (processedData.photo !== null) {
-                        processedData.photo = base64ToDataUrl(processedData.photo);
-                    }
-                }
-                if ('projects' in processedData) {
-                    processedData.projects = processedData.projects.map(project => ({
-                        ...project,
-                        image: base64ToDataUrl(project.image)
-                    }));
-                }
-
-                setData(processedData);
+            if (page === 'messages') {
+                setData(response.data.data);
                 setLoading(false);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                } else {
-                    setError('An unknown error occurred');
-                }
-                setLoading(false);
+                return;
             }
-        };
 
+            const processedData = response.data.data;
+
+            if ('photo' in processedData) {
+                if (processedData.photo !== null) {
+                    processedData.photo = base64ToDataUrl(processedData.photo);
+                }
+            }
+            if ('projects' in processedData) {
+                processedData.projects = processedData.projects.map(project => ({
+                    ...project,
+                    image: base64ToDataUrl(project.image)
+                }));
+            }
+
+            setData(processedData);
+            setLoading(false);
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError('An unknown error occurred');
+            }
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchData();
+
+        socket.on('newProject', () => {
+            showToast('New Project added!', 'success', 5000);
+            fetchData();
+        });
+
+        socket.on('updateData', () => {
+            showToast('a data has just been updated', 'success', 5000);
+            fetchData();
+        });
+
+        socket.on('createMessage', () => {
+            fetchData();
+        });
+
+        return () => {
+            socket.off('newProject');
+            socket.off('updateData');
+            socket.off('createMessage');
+        };
     }, [page]);
 
     return { data, loading, error };

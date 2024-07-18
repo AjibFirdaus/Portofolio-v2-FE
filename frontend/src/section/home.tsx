@@ -31,7 +31,6 @@ const Home: React.FC<HomeProps> = ({ scrollToSection, refs }) => {
     const handleSave = async () => {
       await updateData(editedData);
       setEditing(false);
-      window.location.reload();
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -43,7 +42,7 @@ const Home: React.FC<HomeProps> = ({ scrollToSection, refs }) => {
         <div className="max-w-2xl w-full">
           {isLoggedIn && !editing && (
             <button onClick={handleEdit} className="bg-purple-600 text-white p-2 rounded mb-10 z-10">
-            Edit This Section
+            Edit Information
           </button>
           )}
           {editing ? (

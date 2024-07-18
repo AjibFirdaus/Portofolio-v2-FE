@@ -20,12 +20,6 @@ app.use((err, req, res, next) => {
 const { startHttpServer } = require("./server_mode/http_mode");
 const { startHttpsServer } = require("./server_mode/https_mode");
 
-const corsOptionsForSystem = {
-  origin: '*',
-  methods: ['POST'],
-  allowedHeaders: ['Content-Type']
-};
-
 const mode = "http";
 
 if (mode === "http") {

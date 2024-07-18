@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const verifyToken = require("../helper/verifyToken");
 const { PrismaClient } = require('@prisma/client');
+const { io } = require("../server");
 const prisma = new PrismaClient();
 
 router.post('/addProject', verifyToken, async (req, res) => {
@@ -40,10 +41,36 @@ router.post('/addProject', verifyToken, async (req, res) => {
       message: 'Project successfully added',
       updatedData: JSON.parse(updatedProjectsPage.data)
     });
-
+    io.emit("newProject")
   } catch (error) {
     console.error('Error saat menambahkan proyek:', error);
     res.status(500).json({ error: 'Terjadi kesalahan saat menambahkan proyek' });
+  }
+});
+
+
+router.post('/createMessage', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const createMessages = await prisma.messages.create({
+      data: {
+        sender: name,
+        email: email,
+        message: message
+      }
+    });
+
+    io.emit("createMessage")
+
+    res.status(201).json({ message: 'Message created successfully' });
+  } catch (error) {
+    console.error('Error creating message:', error);
+    res.status(500).json({ error: 'An error occurred while creating the message' });
   }
 });
 

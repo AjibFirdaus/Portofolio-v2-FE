@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import React, { useState, useRef } from 'react';
 import useFetchData from '../hooks/fetchData';
 import useUpdateData from '../hooks/fetchUpdateData';
@@ -9,9 +10,9 @@ import Modal from '../components/modal';
 const Projects: React.FC = () => {
   const { data, loading, error } = useFetchData('projects');
   const { isLoggedIn, checkingLogin } = useCheckLogin();
-  const { updateData, updating, updateError } = useUpdateData('projects');
-  const { deleteProject, deleting, deleteError } = useDeleteProject();
-  const { addProject, adding, addError } = useAddProject();
+  const { updateData, updateError } = useUpdateData('projects');
+  const { deleteProject } = useDeleteProject();
+  const { addProject, addError } = useAddProject();
   const [editing, setEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedProject, setEditedProject] = useState<any>(null);
@@ -22,101 +23,97 @@ const Projects: React.FC = () => {
   if (error) return <p>Error: {error}</p>;
   if (!data) return <p>No data available</p>;
 
-  const handleEdit = (index: number) => {
-    setEditing(true);
-    setEditingIndex(index);
-    setEditedProject({ ...data.projects[index] });
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setEditedProject({ ...editedProject, [e.target.name]: e.target.value });
-  };
-
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setEditedProject({ ...editedProject, image: base64 });
-    }
-  };
-
-  const handleSave = async () => {
-    const updatedProjects = [...data.projects];
-    updatedProjects[editingIndex!] = editedProject;
-
-    const finalUpdatedProjects = updatedProjects.map(project => {
-      if (project.image.startsWith("data:image")) {
-        return {
-          ...project,
-          image: project.image.split("base64,")[1]
-        };
-      }
-      return project;
-    });
-
-    await updateData({ projects: finalUpdatedProjects });
-    if (!updateError) {
-      window.location.reload(); // Refresh to show updated data
-    }
-    setEditing(false);
-    setEditingIndex(null);
-  };
-
-  const handleAddProject = async () => {
-    const finalProject = (() => {
-      if (newProject.image.startsWith("data:image")) {
-        return {
-          ...newProject,
-          image: newProject.image.split("base64,")[1]
-        };
-      } else {
-        return newProject;
-      }
-    })();
-
-    await addProject(finalProject);
-    window.location.reload()
-    if (!addError) {
-      setNewProject({ title: '', description: '', link: '', image: '' });
-    }
-
-  };
-
-  const openAddProject = () => {
-    const modal = document.getElementById("addProject");
-    if (modal instanceof HTMLDialogElement) {
-      modal.showModal();
-    }
-  };
-
-
-  const handleClose = () => {
-    const modal = document.getElementById("addProject");
-    if (modal instanceof HTMLDialogElement) {
-      modal.close();
-    }
-  };
-
-  const handleDelete = async (projectId: string) => {
-    if (window.confirm('Are you sure you want to delete this project?')) {
-      await deleteProject(projectId);
-      if (!deleteError) {
-        window.location.reload()
-      }
-    }
-  };
-
-
-  const convertToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
-    });
-  };
-
   if ('projects' in data) {
+    const handleEdit = (index: number) => {
+      setEditing(true);
+      setEditingIndex(index);
+      setEditedProject({ ...data.projects[index] });
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setEditedProject({ ...editedProject, [e.target.name]: e.target.value });
+    };
+
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const base64 = await convertToBase64(file);
+        setEditedProject({ ...editedProject, image: base64 });
+      }
+    };
+
+    const handleSave = async () => {
+      const updatedProjects = [...data.projects];
+      updatedProjects[editingIndex!] = editedProject;
+
+      const finalUpdatedProjects = updatedProjects.map(project => {
+        if (project.image.startsWith("data:image")) {
+          return {
+            ...project,
+            image: project.image.split("base64,")[1]
+          };
+        }
+        return project;
+      });
+
+      await updateData({ projects: finalUpdatedProjects });
+      setEditing(false);
+      setEditingIndex(null);
+    };
+
+    const handleAddProject = async () => {
+      const finalProject = (() => {
+        if (newProject.image.startsWith("data:image")) {
+          return {
+            ...newProject,
+            image: newProject.image.split("base64,")[1]
+          };
+        } else {
+          return newProject;
+        }
+      })();
+
+      await addProject(finalProject);
+      setNewProject({ title: '', description: '', link: '', image: '' });
+      handleClose()
+      if (!addError) {
+        setNewProject({ title: '', description: '', link: '', image: '' });
+        handleClose()
+      }
+
+    };
+
+    const openAddProject = () => {
+      const modal = document.getElementById("addProject");
+      if (modal instanceof HTMLDialogElement) {
+        modal.showModal();
+      }
+    };
+
+
+    const handleClose = () => {
+      const modal = document.getElementById("addProject");
+      if (modal instanceof HTMLDialogElement) {
+        modal.close();
+      }
+    };
+
+    const handleDelete = async (projectId: string) => {
+      if (window.confirm('Are you sure you want to delete this project?')) {
+        await deleteProject(projectId);
+      }
+    };
+
+
+    const convertToBase64 = (file: File): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = error => reject(error);
+      });
+    };
+
     return (
       <section className="bg-black text-white pt-16 min-h-screen">
         <div className="container mx-auto px-4 py-8">
@@ -162,7 +159,7 @@ const Projects: React.FC = () => {
                     />
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="btn btn-secondary mb-2"
+                      className="btn btn-secondary mb-2 mr-2"
                     >
                       Change Image
                     </button>
@@ -236,6 +233,8 @@ const Projects: React.FC = () => {
       </section>
     );
   }
-};
+}
+
+
 
 export default Projects;

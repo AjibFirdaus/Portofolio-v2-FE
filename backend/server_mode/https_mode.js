@@ -10,14 +10,11 @@ const startHttpsServer = (app, port) => {
   };
   const server = https.createServer(options, app);
 
-  // Ubah ini menjadi array
   const allowedOrigins = [
-    "https://www.growtovia.com",
-    "https://growtovia.com",
-    "https://api.growtovia.com"
+    "https://www.ajibfirdaus.my.id",
+    "https://ajibfirdaus.my.id",
   ];
 
-  // socket io
   const ioServer = io(server, {
     cors: {
       origin: allowedOrigins,
@@ -39,7 +36,7 @@ const startHttpsServer = (app, port) => {
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true
+    credentials: true,
   };
 
   module.exports.io = ioServer;
@@ -48,9 +45,6 @@ const startHttpsServer = (app, port) => {
   app.use(cors(corsOptions));
 
   app.use((req, res, next) => {
-    if (req.path.startsWith("/api-system2131230fsmLLLL")) {
-      return next();
-    }
     const origin = req.get("origin");
     let ip = req.ip;
 
