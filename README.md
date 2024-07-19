@@ -31,16 +31,16 @@ Portofolio-v2 adalah situs web portofolio yang dibangun menggunakan React Vite u
 *Gambar 2: Tampilan Home*
 
 ![About Section](./doc/about.png)
-*Gambar 2: Tampilan About*
+*Gambar 3: Tampilan About*
 
 ![Projects Section](./doc/projects.png)
-*Gambar 2: Tampilan Projects*
+*Gambar 3: Tampilan Projects*
 
 ![Contact Section](./doc/contact.png)
-*Gambar 2: Tampilan Contact*
+*Gambar 4: Tampilan Contact*
 
 ![Messages Section](./doc/messages.png)
-*Gambar 2: Tampilan Messages*
+*Gambar 5: Tampilan Messages*
 
 ## Instalasi
 
