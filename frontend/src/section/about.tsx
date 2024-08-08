@@ -45,7 +45,7 @@ const About: React.FC = () => {
         return editedData;
       }
     })();
-    // console.log(finalEdited);
+
     await updateData(finalEdited);
     if (!updateError) {
       setIsEditing(false);
@@ -68,7 +68,7 @@ const About: React.FC = () => {
 
   if ('photo' in data) {
     return (
-      <section className="bg-black text-white min-h-screen flex items-center">
+      <section className="bg-black text-white min-h-screen mx-5 flex items-center">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
           <div className="md:w-1/2">
             <h2 className="text-4xl font-bold mb-4">About Me</h2>
